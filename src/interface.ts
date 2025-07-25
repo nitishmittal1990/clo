@@ -12,5 +12,5 @@ export interface IProductItem {
 
 export interface FilterState {
   pricingOptions: PricingOption[];
-  keyword: string;
+  searchKeyword: string;
 }

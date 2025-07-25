@@ -7,10 +7,10 @@ import { useProductStore } from '../store';
 import type { PricingOption } from '../interface';
 
 export default function ProductListing() {
-  const fetchContents = useProductStore((s) => s.fetchContents);
+  const fetchContents = useProductStore((s) => s.fetchProducts);
   const filter = useProductStore((s) => s.filter);
   const setPricingOptions = useProductStore((s) => s.setPricingOptions);
-  const setKeyword = useProductStore((s) => s.setKeyword);
+  const setKeyword = useProductStore((s) => s.setSearchKeyword);
   const error = useProductStore((s) => s.error);
   const clearError = useProductStore((s) => s.clearError);
   const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function ProductListing() {
 
     const params: Record<string, string> = {};
     if (filter.pricingOptions.length > 0) params.pricing = filter.pricingOptions.join(',');
-    if (filter.keyword) params.search = filter.keyword;
+    if (filter.searchKeyword) params.search = filter.searchKeyword;
 
     const currentPricing = searchParams.get('pricing') || '';
     const currentSearch = searchParams.get('search') || '';
@@ -55,7 +55,7 @@ export default function ProductListing() {
       setSearchParams(params, { replace: true });
     }
     // eslint-disable-next-line
-  }, [filter.pricingOptions, filter.keyword, isInitialized]);
+  }, [filter.pricingOptions, filter.searchKeyword, isInitialized]);
 
   const handleRetry = () => {
     setLoading(true);

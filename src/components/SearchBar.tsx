@@ -1,7 +1,7 @@
 import { useProductStore } from '../store';
 
 export default function SearchBar() {
-  const { filter, setKeyword } = useProductStore();
+  const { filter, setSearchKeyword: setKeyword } = useProductStore();
 
   return (
     <div className="flex items-center rounded-lg bg-secondary p-4">
@@ -9,11 +9,11 @@ export default function SearchBar() {
         type="text"
         placeholder="Find the items you're looking for"
         className="flex-1 border-none bg-transparent text-lg text-white outline-none placeholder:text-gray-400"
-        value={filter.keyword}
+        value={filter.searchKeyword}
         onChange={(e) => setKeyword(e.target.value)}
         aria-label="Search contents"
       />
-      {filter.keyword && (
+      {filter.searchKeyword && (
         <button
           onClick={() => setKeyword('')}
           className="ml-2 rounded text-xl text-white hover:text-[#1ED760] focus:outline-none focus:ring-2 focus:ring-[#00E6F6]"

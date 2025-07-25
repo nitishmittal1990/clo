@@ -11,8 +11,8 @@ export function filterAndSearch(contents: IProductItem[], filter: FilterState) {
   if (filter.pricingOptions.length > 0) {
     filtered = filtered.filter((item) => filter.pricingOptions.includes(item.pricing));
   }
-  if (filter.keyword.trim()) {
-    const keyword = filter.keyword.trim().toLowerCase();
+  if (filter.searchKeyword.trim()) {
+    const keyword = filter.searchKeyword.trim().toLowerCase();
     filtered = filtered.filter(
       (item) =>
         item.title.toLowerCase().includes(keyword) || item.userName.toLowerCase().includes(keyword)

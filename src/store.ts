@@ -9,9 +9,9 @@ interface IProductStore {
   filter: FilterState;
   error: string | null;
   setPricingOptions: (options: PricingOption[]) => void;
-  setKeyword: (keyword: string) => void;
+  setSearchKeyword: (keyword: string) => void;
   resetFilters: () => void;
-  fetchContents: () => Promise<void>;
+  fetchProducts: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -20,7 +20,7 @@ export const useProductStore = create<IProductStore>((set, get) => ({
   filteredItems: [],
   filter: {
     pricingOptions: [],
-    keyword: '',
+    searchKeyword: '',
   },
   error: null,
   setPricingOptions: (options) => {
@@ -32,9 +32,9 @@ export const useProductStore = create<IProductStore>((set, get) => ({
       };
     });
   },
-  setKeyword: (keyword) => {
+  setSearchKeyword: (searchKeyword) => {
     set((state) => {
-      const newFilter = { ...state.filter, keyword };
+      const newFilter = { ...state.filter, searchKeyword };
       return {
         filter: newFilter,
         filteredItems: filterAndSearch(state.items, newFilter),
@@ -43,11 +43,11 @@ export const useProductStore = create<IProductStore>((set, get) => ({
   },
   resetFilters: () => {
     set((state) => ({
-      filter: { pricingOptions: [], keyword: '' },
+      filter: { pricingOptions: [], searchKeyword: '' },
       filteredItems: state.items,
     }));
   },
-  fetchContents: async () => {
+  fetchProducts: async () => {
     try {
       set({ error: null });
       const response = await fetch(API_URL);
