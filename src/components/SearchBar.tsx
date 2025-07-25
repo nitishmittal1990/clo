@@ -4,7 +4,7 @@ export default function SearchBar() {
   const { filter, setKeyword } = useContentStore();
 
   return (
-    <div className="flex items-center rounded-lg bg-[#23262F] p-4">
+    <div className="flex items-center rounded-lg bg-secondary p-4">
       <input
         type="text"
         placeholder="Find the items you're looking for"

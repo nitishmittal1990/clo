@@ -9,30 +9,28 @@ interface IProductCardProps {
 
 const ProductCard: React.FC<IProductCardProps> = ({ item }): React.ReactElement => {
   return (
-    <div className="relative flex min-h-[320px] flex-col justify-end rounded-lg bg-[#23262F] p-4">
-      <div className="mb-4 flex h-44 items-center justify-center overflow-hidden rounded-lg bg-[#181A20]">
+    <div className="relative flex min-h-[320px] flex-col justify-end rounded-lg bg-secondary p-4">
+      <div className="mb-4 flex items-center justify-center overflow-hidden rounded-lg bg-secondary">
         {item.photoUrl ? (
           <img src={item.photoUrl} alt={item.title} className="h-full w-full object-contain" />
         ) : (
           <span className="text-gray-500">No Image</span>
         )}
       </div>
-      <div className="mb-1 truncate text-base font-semibold">{item.title}</div>
-      <div className="mb-2 truncate text-sm text-gray-400">{item.userName}</div>
-      <div className="flex items-center gap-2">
-        {item.pricing === 'paid' ? (
-          <span className="rounded border border-[#1ED760] bg-[#23262F] px-2 py-0.5 text-xs font-bold text-[#1ED760]">
-            ${item.price?.toFixed(2)}
-          </span>
-        ) : item.pricing === 'free' ? (
-          <span className="rounded bg-[#1ED760] px-2 py-0.5 text-xs font-bold text-[#181A20]">
-            FREE
-          </span>
-        ) : (
-          <span className="rounded border border-[#fff2] bg-[#181A20] px-2 py-0.5 text-xs font-bold text-white">
-            VIEW ONLY
-          </span>
-        )}
+      <div className="flex items-center justify-between gap-2 text-gray-400">
+        <div>
+          <p className="mb-1 truncate text-sm font-semibold">{item.title}</p>
+          <p className="mb-2 truncate text-xs">{item.userName}</p>
+        </div>
+        <div className="flex items-center gap-2 text-lg font-bold text-white">
+          {item.pricing === 'paid' ? (
+            <span>${item.price?.toFixed(2)}</span>
+          ) : item.pricing === 'free' ? (
+            <span className="">FREE</span>
+          ) : (
+            <span className="">VIEW ONLY</span>
+          )}
+        </div>
       </div>
     </div>
   );
