@@ -27,7 +27,7 @@ export default function FilterBar() {
       <span className="text-base font-semibold text-accent">Pricing Options</span>
       <div className="ml-6 flex gap-3">
         {PRICING_OPTIONS.map((opt) => (
-          <label key={opt.value} className="flex items-center gap-1.5">
+          <label key={opt.value} className="flex cursor-pointer items-center gap-1.5">
             <input
               type="checkbox"
               className="rounded accent-[#00E6F6] focus:ring-2 focus:ring-[#00E6F6]"
@@ -40,7 +40,7 @@ export default function FilterBar() {
         ))}
       </div>
       <button
-        className="ml-auto rounded border border-gray-500 bg-[#181A20] px-6 py-2 font-semibold text-[#00E6F6] transition hover:bg-[#23262F] focus:outline-none focus:ring-2 focus:ring-[#00E6F6]"
+        className="ml-auto rounded border border-gray-500 bg-[#181A20] px-6 py-2 text-sm text-gray-400 transition hover:bg-[#23262F] focus:outline-none"
         onClick={resetFilters}
         aria-label="Reset filters"
       >

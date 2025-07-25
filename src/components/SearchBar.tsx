@@ -22,7 +22,7 @@ export default function SearchBar() {
           ×
         </button>
       )}
-      <span className="ml-2 cursor-pointer text-2xl text-[#00E6F6]" aria-hidden="true">
+      <span className="ml-2 cursor-pointer text-2xl" aria-hidden="true">
         🔍
       </span>
     </div>
