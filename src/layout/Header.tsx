@@ -1,8 +1,8 @@
 export default function Header() {
   return (
-    <header className="flex items-center px-8 py-4 border-b border-[#222]">
-      <div className="font-bold text-2xl text-[#00E6F6] tracking-wide">
-        <img src="/images/logo.svg" alt="CONNECT" className="w-10 h-10" />
+    <header className="flex items-center border-b border-[#222] p-8">
+      <div className="container mx-auto">
+        <img src="/images/logo.svg" alt="CONNECT" className="block w-20" />
       </div>
     </header>
   );

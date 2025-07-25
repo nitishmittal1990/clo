@@ -1,9 +1,15 @@
-import { useContentStore, type PricingOption } from "./store";
+import type { PricingOption } from '../interface';
+import { useContentStore } from '../store';
 
-const PRICING_OPTIONS: { label: string; value: PricingOption }[] = [
-  { label: "Paid", value: "paid" },
-  { label: "Free", value: "free" },
-  { label: "View Only", value: "viewOnly" },
+interface IPricingOption {
+  label: string;
+  value: PricingOption;
+}
+
+const PRICING_OPTIONS: IPricingOption[] = [
+  { label: 'Paid', value: 'paid' },
+  { label: 'Free', value: 'free' },
+  { label: 'View Only', value: 'viewOnly' },
 ];
 
 export default function FilterBar() {
@@ -17,16 +23,14 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="bg-[#23262F] rounded-lg p-4 flex items-center gap-4">
-      <span className="font-semibold text-[#00E6F6] text-base">
-        Contents Filter
-      </span>
-      <div className="flex gap-3 ml-6">
+    <div className="flex items-center gap-4 rounded-lg bg-[#23262F] p-4">
+      <span className="text-base font-semibold text-accent">Pricing Options</span>
+      <div className="ml-6 flex gap-3">
         {PRICING_OPTIONS.map((opt) => (
           <label key={opt.value} className="flex items-center gap-1.5">
             <input
               type="checkbox"
-              className="accent-[#00E6F6] focus:ring-2 focus:ring-[#00E6F6] rounded"
+              className="rounded accent-[#00E6F6] focus:ring-2 focus:ring-[#00E6F6]"
               checked={filter.pricingOptions.includes(opt.value)}
               onChange={() => handleChange(opt.value)}
               aria-label={`Toggle ${opt.label} filter`}
@@ -36,7 +40,7 @@ export default function FilterBar() {
         ))}
       </div>
       <button
-        className="ml-auto bg-[#181A20] text-[#00E6F6] border border-[#00E6F6] rounded px-6 py-2 font-semibold hover:bg-[#23262F] transition focus:outline-none focus:ring-2 focus:ring-[#00E6F6]"
+        className="ml-auto rounded border border-gray-500 bg-[#181A20] px-6 py-2 font-semibold text-[#00E6F6] transition hover:bg-[#23262F] focus:outline-none focus:ring-2 focus:ring-[#00E6F6]"
         onClick={resetFilters}
         aria-label="Reset filters"
       >

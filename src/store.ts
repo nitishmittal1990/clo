@@ -1,25 +1,11 @@
 import { create } from 'zustand';
+import { API_URL } from './constant';
+import type { IProductItem, FilterState, PricingOption } from './interface';
+import { filterAndSearch, mapPricingOption } from './utils';
 
-// Types for content items and filter/search state
-export type PricingOption = 'paid' | 'free' | 'viewOnly';
-
-export interface ContentItem {
-  id: string;
-  title: string;
-  userName: string;
-  photoUrl: string;
-  pricing: PricingOption;
-  price?: number;
-}
-
-export interface FilterState {
-  pricingOptions: PricingOption[];
-  keyword: string;
-}
-
-interface ContentStore {
-  contents: ContentItem[];
-  filteredContents: ContentItem[];
+interface IProductStore {
+  items: IProductItem[];
+  filteredItems: IProductItem[];
   filter: FilterState;
   error: string | null;
   setPricingOptions: (options: PricingOption[]) => void;
@@ -31,32 +17,9 @@ interface ContentStore {
   syncWithUrl: (params: URLSearchParams) => void;
 }
 
-const API_URL = 'https://closet-recruiting-api.azurewebsites.net/api/data';
-
-function mapPricingOption(option: number): PricingOption {
-  if (option === 0) return 'paid';
-  if (option === 1) return 'free';
-  return 'viewOnly';
-}
-
-function filterAndSearch(contents: ContentItem[], filter: FilterState) {
-  let filtered = contents;
-  if (filter.pricingOptions.length > 0) {
-    filtered = filtered.filter(item => filter.pricingOptions.includes(item.pricing));
-  }
-  if (filter.keyword.trim()) {
-    const keyword = filter.keyword.trim().toLowerCase();
-    filtered = filtered.filter(item =>
-      item.title.toLowerCase().includes(keyword) ||
-      item.userName.toLowerCase().includes(keyword)
-    );
-  }
-  return filtered;
-}
-
-export const useContentStore = create<ContentStore>((set, get) => ({
-  contents: [],
-  filteredContents: [],
+export const useContentStore = create<IProductStore>((set, get) => ({
+  items: [],
+  filteredItems: [],
   filter: {
     pricingOptions: [],
     keyword: '',
@@ -67,7 +30,7 @@ export const useContentStore = create<ContentStore>((set, get) => ({
       const newFilter = { ...state.filter, pricingOptions: options };
       return {
         filter: newFilter,
-        filteredContents: filterAndSearch(state.contents, newFilter),
+        filteredItems: filterAndSearch(state.items, newFilter),
       };
     });
   },
@@ -76,14 +39,14 @@ export const useContentStore = create<ContentStore>((set, get) => ({
       const newFilter = { ...state.filter, keyword };
       return {
         filter: newFilter,
-        filteredContents: filterAndSearch(state.contents, newFilter),
+        filteredItems: filterAndSearch(state.items, newFilter),
       };
     });
   },
   resetFilters: () => {
     set((state) => ({
       filter: { pricingOptions: [], keyword: '' },
-      filteredContents: state.contents,
+      filteredItems: state.items,
     }));
   },
   fetchContents: async () => {
@@ -92,7 +55,7 @@ export const useContentStore = create<ContentStore>((set, get) => ({
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
-      const mapped: ContentItem[] = data.map((item: any) => ({
+      const mapped: IProductItem[] = data.map((item: any) => ({
         id: item.id,
         title: item.title,
         userName: item.creator,
@@ -100,7 +63,7 @@ export const useContentStore = create<ContentStore>((set, get) => ({
         pricing: mapPricingOption(item.pricingOption),
         price: item.price,
       }));
-      set({ contents: mapped, filteredContents: mapped });
+      set({ items: mapped, filteredItems: mapped });
     } catch (e: any) {
       set({ error: e.message || 'Unknown error occurred' });
     }
@@ -109,4 +72,4 @@ export const useContentStore = create<ContentStore>((set, get) => ({
   syncWithUrl: (params) => {
     // Placeholder for syncing state with URL query params
   },
-})); 
+}));
