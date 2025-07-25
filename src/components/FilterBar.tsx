@@ -1,5 +1,5 @@
 import type { PricingOption } from '../interface';
-import { useContentStore } from '../store';
+import { useProductStore } from '../store';
 
 interface IPricingOption {
   label: string;
@@ -13,7 +13,7 @@ const PRICING_OPTIONS: IPricingOption[] = [
 ];
 
 export default function FilterBar() {
-  const { filter, setPricingOptions, resetFilters } = useContentStore();
+  const { filter, setPricingOptions, resetFilters } = useProductStore();
 
   const handleChange = (option: PricingOption) => {
     const options = filter.pricingOptions.includes(option)

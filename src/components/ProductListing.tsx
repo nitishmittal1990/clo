@@ -3,16 +3,16 @@ import { useSearchParams } from 'react-router-dom';
 import ProductItems from './ProductItems';
 import FilterBar from './FilterBar';
 import SearchBar from './SearchBar';
-import { useContentStore } from '../store';
+import { useProductStore } from '../store';
 import type { PricingOption } from '../interface';
 
 export default function ProductListing() {
-  const fetchContents = useContentStore((s) => s.fetchContents);
-  const filter = useContentStore((s) => s.filter);
-  const setPricingOptions = useContentStore((s) => s.setPricingOptions);
-  const setKeyword = useContentStore((s) => s.setKeyword);
-  const error = useContentStore((s) => s.error);
-  const clearError = useContentStore((s) => s.clearError);
+  const fetchContents = useProductStore((s) => s.fetchContents);
+  const filter = useProductStore((s) => s.filter);
+  const setPricingOptions = useProductStore((s) => s.setPricingOptions);
+  const setKeyword = useProductStore((s) => s.setKeyword);
+  const error = useProductStore((s) => s.error);
+  const clearError = useProductStore((s) => s.clearError);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isInitialized, setIsInitialized] = useState(false);

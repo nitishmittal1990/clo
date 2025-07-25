@@ -1,4 +1,4 @@
-import { useContentStore } from '../store';
+import { useProductStore } from '../store';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useState, useEffect } from 'react';
 import type { IProductItem } from '../interface';
@@ -39,7 +39,7 @@ const ProductCard: React.FC<IProductCardProps> = ({ item }): React.ReactElement 
 const PAGE_SIZE = 16;
 
 export default function ProductItems() {
-  const { filteredItems: filteredContents } = useContentStore();
+  const { filteredItems: filteredContents } = useProductStore();
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {

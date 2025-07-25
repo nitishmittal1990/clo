@@ -13,11 +13,9 @@ interface IProductStore {
   resetFilters: () => void;
   fetchContents: () => Promise<void>;
   clearError: () => void;
-  // Placeholder for syncing with URL query params
-  syncWithUrl: (params: URLSearchParams) => void;
 }
 
-export const useContentStore = create<IProductStore>((set, get) => ({
+export const useProductStore = create<IProductStore>((set, get) => ({
   items: [],
   filteredItems: [],
   filter: {
@@ -64,16 +62,13 @@ export const useContentStore = create<IProductStore>((set, get) => ({
         price: item.price,
       }));
       const currentFilter = get().filter;
-      set({ 
-        items: mapped, 
-        filteredItems: filterAndSearch(mapped, currentFilter)
+      set({
+        items: mapped,
+        filteredItems: filterAndSearch(mapped, currentFilter),
       });
     } catch (e: any) {
       set({ error: e.message || 'Unknown error occurred' });
     }
   },
   clearError: () => set({ error: null }),
-  syncWithUrl: (params) => {
-    // Placeholder for syncing state with URL query params
-  },
 }));
