@@ -63,7 +63,11 @@ export const useContentStore = create<IProductStore>((set, get) => ({
         pricing: mapPricingOption(item.pricingOption),
         price: item.price,
       }));
-      set({ items: mapped, filteredItems: mapped });
+      const currentFilter = get().filter;
+      set({ 
+        items: mapped, 
+        filteredItems: filterAndSearch(mapped, currentFilter)
+      });
     } catch (e: any) {
       set({ error: e.message || 'Unknown error occurred' });
     }

@@ -11,35 +11,51 @@ export default function ProductListing() {
   const filter = useContentStore((s) => s.filter);
   const setPricingOptions = useContentStore((s) => s.setPricingOptions);
   const setKeyword = useContentStore((s) => s.setKeyword);
-  const resetFilters = useContentStore((s) => s.resetFilters);
   const error = useContentStore((s) => s.error);
   const clearError = useContentStore((s) => s.clearError);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // On mount: fetch data and initialize filter/search from URL
+  // Initialize filter/search from URL immediately on mount
   useEffect(() => {
-    fetchContents().finally(() => setLoading(false));
-    // Initialize filter/search from URL
     const pricing = searchParams.get('pricing');
     const keyword = searchParams.get('search') || '';
     if (pricing) {
       const options = pricing.split(',').filter(Boolean) as PricingOption[];
       setPricingOptions(options);
     }
-    if (keyword) setKeyword(keyword);
-    if (!pricing && !keyword) resetFilters();
+    if (keyword) {
+      setKeyword(keyword);
+    }
+    setIsInitialized(true);
+    // eslint-disable-next-line
+  }, [searchParams]);
+
+  // Fetch data on mount
+  useEffect(() => {
+    fetchContents().finally(() => setLoading(false));
     // eslint-disable-next-line
   }, []);
 
-  // On filter/search change: update URL
+  // On filter/search change: update URL only if different (skip initial render)
   useEffect(() => {
+    if (!isInitialized) return;
+
     const params: Record<string, string> = {};
     if (filter.pricingOptions.length > 0) params.pricing = filter.pricingOptions.join(',');
     if (filter.keyword) params.search = filter.keyword;
-    setSearchParams(params, { replace: true });
+
+    const currentPricing = searchParams.get('pricing') || '';
+    const currentSearch = searchParams.get('search') || '';
+    const paramsPricing = params.pricing || '';
+    const paramsSearch = params.search || '';
+
+    if (currentPricing !== paramsPricing || currentSearch !== paramsSearch) {
+      setSearchParams(params, { replace: true });
+    }
     // eslint-disable-next-line
-  }, [filter.pricingOptions, filter.keyword]);
+  }, [filter.pricingOptions, filter.keyword, isInitialized]);
 
   const handleRetry = () => {
     setLoading(true);
