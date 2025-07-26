@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import type { IProductItem } from '../interface';
 import { PAGINATION_SIZE } from '../constant';
 
+const renderPricing = (item: IProductItem): string => {
+  if (item.pricing === 'paid') return item.price.toFixed(2);
+  if (item.pricing === 'free') return 'FREE';
+  return 'VIEW ONLY';
+};
+
 interface IProductCardProps {
   item: IProductItem;
 }
@@ -24,13 +30,7 @@ const ProductCard: React.FC<IProductCardProps> = ({ item }): React.ReactElement 
           <p className="mb-2 truncate text-xs">{item.userName}</p>
         </div>
         <div className="flex items-center gap-2 text-lg font-bold text-white">
-          {item.pricing === 'paid' ? (
-            <span>${item.price?.toFixed(2)}</span>
-          ) : item.pricing === 'free' ? (
-            <span className="">FREE</span>
-          ) : (
-            <span className="">VIEW ONLY</span>
-          )}
+          {renderPricing(item)}
         </div>
       </div>
     </div>

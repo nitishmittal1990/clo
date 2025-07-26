@@ -1,63 +1,32 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import ProductItems from './ProductItems';
 import FilterBar from './FilterBar';
 import SearchBar from './SearchBar';
 import { useProductStore } from '../store';
-import type { PricingOption } from '../interface';
+import { useUrlSync } from '../hooks/useUrlSync';
 
 export default function ProductListing() {
-  const fetchContents = useProductStore((s) => s.fetchProducts);
+  const fetchItems = useProductStore((s) => s.fetchProducts);
   const filter = useProductStore((s) => s.filter);
   const setPricingOptions = useProductStore((s) => s.setPricingOptions);
-  const setKeyword = useProductStore((s) => s.setSearchKeyword);
+  const setSearchKeyword = useProductStore((s) => s.setSearchKeyword);
   const error = useProductStore((s) => s.error);
   const clearError = useProductStore((s) => s.clearError);
   const [loading, setLoading] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize filter/search from URL immediately on mount
-  useEffect(() => {
-    const pricing = searchParams.get('pricing');
-    const keyword = searchParams.get('search') || '';
-    if (pricing) {
-      const options = pricing.split(',').filter(Boolean) as PricingOption[];
-      setPricingOptions(options);
-    }
-    if (keyword) {
-      setKeyword(keyword);
-    }
-    setIsInitialized(true);
-  }, [searchParams]);
+  // Use custom hook for URL synchronization
+  useUrlSync({ filter, setPricingOptions, setSearchKeyword });
 
   // Fetch data on mount
   useEffect(() => {
-    fetchContents().finally(() => setLoading(false));
+    fetchItems().finally(() => setLoading(false));
   }, []);
 
-  // On filter/search change: update URL only if different (skip initial render)
-  useEffect(() => {
-    if (!isInitialized) return;
-
-    const params: Record<string, string> = {};
-    if (filter.pricingOptions.length > 0) params.pricing = filter.pricingOptions.join(',');
-    if (filter.searchKeyword) params.search = filter.searchKeyword;
-
-    const currentPricing = searchParams.get('pricing') || '';
-    const currentSearch = searchParams.get('search') || '';
-    const paramsPricing = params.pricing || '';
-    const paramsSearch = params.search || '';
-
-    if (currentPricing !== paramsPricing || currentSearch !== paramsSearch) {
-      setSearchParams(params, { replace: true });
-    }
-  }, [filter.pricingOptions, filter.searchKeyword, isInitialized]);
-
+  // Retry if API fails
   const handleRetry = () => {
     setLoading(true);
     clearError();
-    fetchContents().finally(() => setLoading(false));
+    fetchItems().finally(() => setLoading(false));
   };
 
   return (
