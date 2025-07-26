@@ -1,7 +1,7 @@
 import { useProductStore } from '../store';
 
 export default function SearchBar() {
-  const { filter, setSearchKeyword: setKeyword } = useProductStore();
+  const { filter, setSearchKeyword } = useProductStore();
 
   return (
     <div className="flex items-center rounded-lg bg-secondary p-4">
@@ -10,12 +10,12 @@ export default function SearchBar() {
         placeholder="Find the items you're looking for"
         className="flex-1 border-none bg-transparent text-lg text-white outline-none placeholder:text-gray-400"
         value={filter.searchKeyword}
-        onChange={(e) => setKeyword(e.target.value)}
+        onChange={(e) => setSearchKeyword(e.target.value)}
         aria-label="Search contents"
       />
       {filter.searchKeyword && (
         <button
-          onClick={() => setKeyword('')}
+          onClick={() => setSearchKeyword('')}
           className="ml-2 rounded text-xl text-white hover:text-[#1ED760] focus:outline-none focus:ring-2 focus:ring-[#00E6F6]"
           aria-label="Clear search"
         >
@@ -23,34 +23,7 @@ export default function SearchBar() {
         </button>
       )}
       <span className="ml-2 cursor-pointer text-2xl" aria-hidden="true">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-          viewBox="0,0,256,256"
-          width="24px"
-          height="24px"
-          fill-rule="nonzero"
-        >
-          <g
-            fill="#ccc"
-            fill-rule="nonzero"
-            stroke="none"
-            stroke-width="1"
-            stroke-linecap="butt"
-            stroke-linejoin="miter"
-            stroke-miterlimit="10"
-            stroke-dasharray=""
-            stroke-dashoffset="0"
-            font-family="none"
-            font-weight="none"
-            font-size="none"
-            text-anchor="none"
-          >
-            <g transform="scale(8.53333,8.53333)">
-              <path d="M13,3c-5.511,0 -10,4.489 -10,10c0,5.511 4.489,10 10,10c2.39651,0 4.59738,-0.85101 6.32227,-2.26367l5.9707,5.9707c0.25082,0.26124 0.62327,0.36648 0.97371,0.27512c0.35044,-0.09136 0.62411,-0.36503 0.71547,-0.71547c0.09136,-0.35044 -0.01388,-0.72289 -0.27512,-0.97371l-5.9707,-5.9707c1.41266,-1.72488 2.26367,-3.92576 2.26367,-6.32227c0,-5.511 -4.489,-10 -10,-10zM13,5c4.43012,0 8,3.56988 8,8c0,4.43012 -3.56988,8 -8,8c-4.43012,0 -8,-3.56988 -8,-8c0,-4.43012 3.56988,-8 8,-8z"></path>
-            </g>
-          </g>
-        </svg>
+        <img src="/images/search.svg" alt="Search" className="h-6 w-6" />
       </span>
     </div>
   );

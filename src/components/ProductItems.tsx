@@ -2,6 +2,7 @@ import { useProductStore } from '../store';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useState, useEffect } from 'react';
 import type { IProductItem } from '../interface';
+import { PAGINATION_SIZE } from '../constant';
 
 interface IProductCardProps {
   item: IProductItem;
@@ -36,14 +37,12 @@ const ProductCard: React.FC<IProductCardProps> = ({ item }): React.ReactElement 
   );
 };
 
-const PAGE_SIZE = 16;
-
 export default function ProductItems() {
   const { filteredItems: filteredContents } = useProductStore();
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount] = useState(PAGINATION_SIZE);
 
   useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
+    setVisibleCount(PAGINATION_SIZE);
   }, [filteredContents]);
 
   const hasMore = visibleCount < filteredContents.length;
@@ -51,7 +50,7 @@ export default function ProductItems() {
 
   const fetchMoreData = () => {
     setTimeout(() => {
-      setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredContents.length));
+      setVisibleCount((prev) => Math.min(prev + PAGINATION_SIZE, filteredContents.length));
     }, 500);
   };
 
@@ -67,9 +66,6 @@ export default function ProductItems() {
       <div className="grid grid-cols-1 gap-6 bg-secondary sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {itemsToShow.length === 0 ? (
           <div className="col-span-full flex flex-col items-center gap-2 py-12 text-center text-gray-400">
-            <span className="text-5xl" aria-hidden="true">
-              📭
-            </span>
             <span>No content found.</span>
           </div>
         ) : (
