@@ -29,13 +29,11 @@ export default function ProductListing() {
       setKeyword(keyword);
     }
     setIsInitialized(true);
-    // eslint-disable-next-line
   }, [searchParams]);
 
   // Fetch data on mount
   useEffect(() => {
     fetchContents().finally(() => setLoading(false));
-    // eslint-disable-next-line
   }, []);
 
   // On filter/search change: update URL only if different (skip initial render)
@@ -54,7 +52,6 @@ export default function ProductListing() {
     if (currentPricing !== paramsPricing || currentSearch !== paramsSearch) {
       setSearchParams(params, { replace: true });
     }
-    // eslint-disable-next-line
   }, [filter.pricingOptions, filter.searchKeyword, isInitialized]);
 
   const handleRetry = () => {

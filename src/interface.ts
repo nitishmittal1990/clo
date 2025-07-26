@@ -7,7 +7,7 @@ export interface IProductItem {
   userName: string;
   photoUrl: string;
   pricing: PricingOption;
-  price?: number;
+  price: number;
 }
 
 export interface FilterState {

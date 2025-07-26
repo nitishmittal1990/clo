@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { API_URL } from './constant';
 import type { IProductItem, FilterState, PricingOption } from './interface';
 import { filterAndSearch, mapPricingOption } from './utils';
+import { validateApiResponse } from './schemas';
 
 interface IProductStore {
   items: IProductItem[];
@@ -53,7 +54,11 @@ export const useProductStore = create<IProductStore>((set, get) => ({
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to fetch data');
       const data = await response.json();
-      const mapped: IProductItem[] = data.map((item: any) => ({
+
+      // Strict validation using Zod
+      const validatedData = validateApiResponse(data);
+
+      const mapped: IProductItem[] = validatedData.map((item) => ({
         id: item.id,
         title: item.title,
         userName: item.creator,
@@ -66,8 +71,9 @@ export const useProductStore = create<IProductStore>((set, get) => ({
         items: mapped,
         filteredItems: filterAndSearch(mapped, currentFilter),
       });
-    } catch (e: any) {
-      set({ error: e.message || 'Unknown error occurred' });
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Unknown error occurred';
+      set({ error: errorMessage });
     }
   },
   clearError: () => set({ error: null }),
